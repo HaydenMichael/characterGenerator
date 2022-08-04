@@ -30,8 +30,9 @@ namespace DnDcharacterGenerator
         }
         public int getRace()
         {
+            Stats a = new Stats();
             var rnd = new Random();
-            string[] allRaces = { "Random", "Dwarf", "Elf", "Halfling", "Human", "Dragonborn", "Gnome", "Half-Elf", "Half-Orc", "Tiefling"};
+            string[] allRaces = a.raceList;
             if (raceSelect.SelectedIndex == 0)
             {
                 int randomRace = rnd.Next(1, allRaces.Length - 1);
@@ -48,8 +49,9 @@ namespace DnDcharacterGenerator
 
         public int getClass()
         {
+            Stats a = new Stats();
             var rnd = new Random();
-            string[] allClasses = { "Random", "Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard" };
+            string[] allClasses = a.classList;
             if (classSelect.SelectedIndex == 0)
             {
                 int randomClass = rnd.Next(1, allClasses.Length - 1);
@@ -59,7 +61,14 @@ namespace DnDcharacterGenerator
             else return classSelect.SelectedIndex;            
         }
 
+
+
         //get subrace menu
+        public int subRaceItems(string item)
+        {
+            return subRaceSelect.Items.Add(String.Format(item));
+        }
+
         public void getSubRaceList()
         {
             if (subRaceSelect != null)
@@ -70,35 +79,29 @@ namespace DnDcharacterGenerator
                 //dwarf
                 if (race == 1)
                 {
-                    subRaceSelect.Items.Add(String.Format("Hill Dwarf"));
-                    subRaceSelect.Items.Add(String.Format("Mountain Dwarf"));
-                    subRaceSelect.SelectedIndex = 0;
+                    subRaceItems("Hill Dwarf");
+                    subRaceItems("Mountain Dwarf");
                 }
                 //elf
                 if (race == 2)
                 {
-                    subRaceSelect.Items.Add(String.Format("High Elf"));
-                    subRaceSelect.Items.Add(String.Format("Wood Elf"));
-                    subRaceSelect.Items.Add(String.Format("Dark Elf (Drow)"));
-                    subRaceSelect.SelectedIndex = 0;
+                    subRaceItems("High Elf");
+                    subRaceItems("Wood Elf");
+                    subRaceItems("Dark Elf (Drow)");
                 }
                 //halfling
                 if (race == 3)
                 {
-                    subRaceSelect.Items.Add(String.Format("Lightfoot Halfling"));
-                    subRaceSelect.Items.Add(String.Format("Stout Halfling"));
-                    subRaceSelect.SelectedIndex = 0;
+                    subRaceItems("Lightfoot Halfling");
+                    subRaceItems("Stout Halfling");
                 }
+                //gnome
                 if (race == 6)
                 {
-                    subRaceSelect.Items.Add(String.Format("Forest Gnome"));
-                    subRaceSelect.Items.Add(String.Format("Rock Gnome"));
-                    subRaceSelect.SelectedIndex = 0;
+                    subRaceItems("Forest Gnome");
+                    subRaceItems("Rock Gnome");
                 }
-                else
-                {
-                    
-                }
+                subRaceSelect.SelectedIndex = 0;
             }
             else { }
         }
@@ -107,20 +110,21 @@ namespace DnDcharacterGenerator
         {
             //declare the utility class for use here
             Utility u = new Utility();
+            Stats a = new Stats();
 
             //generate the name after clicking the button
             
             int race = getRace();
-            race = raceSelect.SelectedIndex;
+            //race = raceSelect.SelectedIndex;
             int subRace = subRaceSelect.SelectedIndex;
             int classDnD = getClass();
             string randomCharacterName = u.nameGen(race);
             characterName.Text = randomCharacterName;
 
             //print class and race even if its random
-            string[] raceList = { "Random", "Dwarf", "Elf", "Halfling", "Human", "Dragonborn", "Gnome", "Half-Elf", "Half-Orc", "Tiefling" };
+            string[] raceList = a.raceList;
             targetRace.Text = raceList[race];
-            string[] classList = { "Random", "Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard" };
+            string[] classList = a.classList;
             targetClass.Text = classList[classDnD];
 
             //test attribute generator
@@ -153,7 +157,8 @@ namespace DnDcharacterGenerator
 
     public class Stats
     {
-
+        public string[] raceList = { "Random", "Dwarf", "Elf", "Halfling", "Human", "Dragonborn", "Gnome", "Half-Elf", "Half-Orc", "Tiefling" };
+        public string[] classList = { "Random", "Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard" };
     }
 
     public class Utility
@@ -316,126 +321,52 @@ namespace DnDcharacterGenerator
         public int[] prioritizeAttributes(int classDnD)
         {
             var rnd = new Random();
+            int strength = 0; int dexterity = 0; int constitution = 0; int intelligence = 0; int wisdom = 0; int charisma = 0;
             //method that assigns attributes based on the users selected class (0 is highest priority, 5 is lowest)
             // if random placeholder
-            if (classDnD == 0)
-            {
-                int strength = 0; int dexterity = 1; int constitution = 2; int intelligence = 3; int wisdom = 4; int charisma = 5;
-                int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                return array;
-            }
+            if (classDnD == 0) { strength = 0; dexterity = 1; constitution = 2; intelligence = 3; wisdom = 4; charisma = 5; }
             //barbarian
-            else if (classDnD == 1)
-            {
-                int strength = 0; int dexterity = 2; int constitution = 1; int intelligence = 5; int wisdom = 4; int charisma = 3;
-                int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                return array;
-            }
+            else if (classDnD == 1) {strength = 0; dexterity = 2; constitution = 1; intelligence = 5; wisdom = 4; charisma = 3;}
             //bard
-            else if (classDnD == 2)
-            {
-                int strength = 5; int dexterity = 1; int constitution = 2; int intelligence = 4; int wisdom = 3; int charisma = 0;
-                int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                return array;
-            }
+            else if (classDnD == 2) {strength = 5; dexterity = 1; constitution = 2; intelligence = 4; wisdom = 3; charisma = 0;}
             //cleric
-            else if (classDnD == 3)
-            {
-                int strength = 1; int dexterity = 3; int constitution = 2; int intelligence = 4; int wisdom = 0; int charisma = 5;
-                int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                return array;
-            }
+            else if (classDnD == 3) {strength = 1; dexterity = 3; constitution = 2; intelligence = 4; wisdom = 0; charisma = 5;}
             //druid
-            else if (classDnD == 4)
-            {
-                int strength = 4; int dexterity = 2; int constitution = 1; int intelligence = 3; int wisdom = 0; int charisma = 5;
-                int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                return array;
-            }
+            else if (classDnD == 4) {strength = 4; dexterity = 2; constitution = 1; intelligence = 3; wisdom = 0; charisma = 5;}
             //fighter
             else if (classDnD == 5)
             {
                 //fighter can be an archer or just a standard melee fighter; determine which here
-                int flipCoin = rnd.Next(0, 2);
-                if (flipCoin < 1)
-                {
-                    int strength = 0; int dexterity = 2; int constitution = 1; int intelligence = 5; int wisdom = 4; int charisma = 3;
-                    int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                    return array;
-                }
-                else
-                {
-                    int strength = 3; int dexterity = 0; int constitution = 1; int intelligence = 5; int wisdom = 2; int charisma = 4;
-                    int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                    return array;
-                }
+                int flipCoin = rnd.Next(1, 3);
+                //melee
+                if (flipCoin == 1) {strength = 0; dexterity = 2; constitution = 1; intelligence = 5; wisdom = 4; charisma = 3;}
+                //ranged
+                else {strength = 3; dexterity = 0; constitution = 1; intelligence = 5; wisdom = 2; charisma = 4;}
             }
             //monk
-            else if (classDnD == 6)
-            {
-                int strength = 5; int dexterity = 0; int constitution = 2; int intelligence = 3; int wisdom = 1; int charisma = 4;
-                int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                return array;
-            }
+            else if (classDnD == 6){strength = 5; dexterity = 0; constitution = 2; intelligence = 3; wisdom = 1; charisma = 4;}
             //paladin
-            else if (classDnD == 7)
-            {
-                int strength = 0; int dexterity = 3; int constitution = 2; int intelligence = 5; int wisdom = 4; int charisma = 1;
-                int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                return array;
-            }
+            else if (classDnD == 7) {strength = 0; dexterity = 3; constitution = 2; intelligence = 5; wisdom = 4; charisma = 1;}
             //ranger
-            else if (classDnD == 8)
-            {
-                int strength = 5; int dexterity = 0; int constitution = 2; int intelligence = 4; int wisdom = 1; int charisma = 3;
-                int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                return array;
-            }
+            else if (classDnD == 8) {strength = 5; dexterity = 0; constitution = 2; intelligence = 4; wisdom = 1; charisma = 3;}
             //rogue
             else if (classDnD == 9)
             {
                 //rogue also has two styles of play to switch between
-                int flipCoin = rnd.Next(0, 2);
-                if (flipCoin < 1)
-                {
-                    int strength = 5; int dexterity = 0; int constitution = 2; int intelligence = 1; int wisdom = 4; int charisma = 3;
-                    int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                    return array;
-
-                }
-                else
-                {
-                    int strength = 5; int dexterity = 0; int constitution = 2; int intelligence = 3; int wisdom = 4; int charisma = 1;
-                    int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                    return array;
-                }
+                int flipCoin = rnd.Next(1, 3);
+                if (flipCoin == 1) {strength = 5; dexterity = 0; constitution = 2; intelligence = 1; wisdom = 4; charisma = 3;}
+                else {strength = 5; dexterity = 0; constitution = 2; intelligence = 3; wisdom = 4;  charisma = 1;}
             }
             //sorcerer
-            else if (classDnD == 10)
-            {
-                int strength = 5; int dexterity = 4; int constitution = 1; int intelligence = 2; int wisdom = 3; int charisma = 0;
-                int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                return array;
-            }
+            else if (classDnD == 10) {strength = 5; dexterity = 4; constitution = 1; intelligence = 2; wisdom = 3; charisma = 0;}
             //warlock
-            else if (classDnD == 11)
-            {
-                int strength = 5; int dexterity = 4; int constitution = 1; int intelligence = 2; int wisdom = 3; int charisma = 0;
-                int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                return array;
-            }
+            else if (classDnD == 11) {strength = 5; dexterity = 4; constitution = 1; intelligence = 2; wisdom = 3; charisma = 0;}
             //wizard
-            else if (classDnD == 12)
-            {
-                int strength = 5; int dexterity = 4; int constitution = 1; int intelligence = 2; int wisdom = 3; int charisma = 0;
-                int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
-                return array;
-            }
-            else
-            {
-                int[] array = {  };
-                return array;
-            }
+            else if (classDnD == 12) {strength = 5; dexterity = 4; constitution = 1; intelligence = 2; wisdom = 3; charisma = 0;}
+
+            //take modified variables and put them into an array
+            int[] array = { strength, dexterity, constitution, intelligence, wisdom, charisma };
+            return array;
         }
 
         public int[] raceAttributeModifier(int raceSelect, int subRaceSelect)
@@ -559,5 +490,3 @@ namespace DnDcharacterGenerator
         }
     }
 }
-
-
