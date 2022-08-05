@@ -36,7 +36,7 @@ namespace DnDcharacterGenerator
             if (raceSelect.SelectedIndex == 0)
             {
                 int randomRace = rnd.Next(1, allRaces.Length - 1);
-                raceSelect.SelectedIndex = randomRace;
+                //raceSelect.SelectedIndex = randomRace;
                 return randomRace;
             }
             else
@@ -64,9 +64,13 @@ namespace DnDcharacterGenerator
 
 
         //get subrace menu
-        public int subRaceItems(string item)
+        //grabs a list of strings (in an array) and adds a new item to the combo box for each item in that array
+        public void subRaceItems(params string[] list)
         {
-            return subRaceSelect.Items.Add(String.Format(item));
+            for (int i = 0; i < list.Length; i++)
+            {
+                subRaceSelect.Items.Add(String.Format(list[i]));
+            }
         }
 
         public void getSubRaceList()
@@ -77,32 +81,30 @@ namespace DnDcharacterGenerator
                 int race = getRace();
                 subRaceSelect.Items.Clear();
                 //dwarf
+                string[] subList = { };
                 if (race == 1)
                 {
-                    subRaceItems("Hill Dwarf");
-                    subRaceItems("Mountain Dwarf");
+                    subList = new string[] { "Hill Dwarf", "Mountain Dwarf" };  
                 }
                 //elf
                 if (race == 2)
                 {
-                    subRaceItems("High Elf");
-                    subRaceItems("Wood Elf");
-                    subRaceItems("Dark Elf (Drow)");
+                    subList = new string[] { "High Elf", "Wood Elf", "Dark Elf" };
                 }
                 //halfling
                 if (race == 3)
                 {
-                    subRaceItems("Lightfoot Halfling");
-                    subRaceItems("Stout Halfling");
+                    subList = new string[] { "Lightfoot Halfling", "Stout Halfling" };
                 }
                 //gnome
                 if (race == 6)
                 {
-                    subRaceItems("Forest Gnome");
-                    subRaceItems("Rock Gnome");
+                    subList = new string[] { "Forest Gnome", "Rock Gnome" };
                 }
                 subRaceSelect.SelectedIndex = 0;
+                subRaceItems(subList);
             }
+            
             else { }
         }
 
@@ -115,7 +117,7 @@ namespace DnDcharacterGenerator
             //generate the name after clicking the button
             
             int race = getRace();
-            //race = raceSelect.SelectedIndex;
+            raceSelect.SelectedIndex = race;
             int subRace = subRaceSelect.SelectedIndex;
             int classDnD = getClass();
             string randomCharacterName = u.nameGen(race);
@@ -373,19 +375,18 @@ namespace DnDcharacterGenerator
         {
             //attribute modifiers go in order on the array: strength, dexterity, constitution, intelligence, wisdom, charisma
             //dwarf
+            int[] modifier = { 0, 0, 0, 0, 0, 0 };
             if (raceSelect == 1)
             {
                 //hill
                 if (subRaceSelect == 0)
                 {
-                    int[] modifier = { 0, 0, 2, 0, 0, 1 };
-                    return modifier;
+                    modifier = new int[] { 0, 0, 2, 0, 0, 1 };
                 }
                 //mountain
                 else
                 {
-                    int[] modifier = { 2, 0, 2, 0, 0, 0 };
-                    return modifier;
+                    modifier = new int[] { 2, 0, 2, 0, 0, 0 };
                 }            
             }
             //elf
@@ -394,20 +395,17 @@ namespace DnDcharacterGenerator
                 //high elf
                 if (subRaceSelect == 0)
                 {
-                    int[] modifier = { 0, 2, 0, 1, 0, 0 };
-                    return modifier;
+                    modifier = new int[] { 0, 2, 0, 1, 0, 0 };
                 }
                 //wood elf
                 else if (subRaceSelect == 1)
                 {
-                    int[] modifier = { 0, 2, 0, 0, 1, 0 };
-                    return modifier;
+                    modifier = new int[] { 0, 2, 0, 0, 1, 0 };
                 }
                 //dark elf
                 else
                 {
-                    int[] modifier = { 0, 2, 0, 0, 0, 1 };
-                    return modifier;
+                    modifier = new int[] { 0, 2, 0, 0, 0, 1 };
                 }
             }
             //halfling
@@ -416,29 +414,25 @@ namespace DnDcharacterGenerator
                 //lightfoot
                 if (subRaceSelect == 0)
                 {
-                    int[] modifier = { 0, 2, 0, 0, 0, 1 };
-                    return modifier;
+                    modifier = new int[] { 0, 2, 0, 0, 0, 1 };
                 }
                 //stout
                 else
                 {
-                    int[] modifier = { 0, 2, 1, 0, 0, 0 };
-                    return modifier;
+                    modifier = new int[] { 0, 2, 1, 0, 0, 0 };
                 }
             }
             
             //human
             if (raceSelect == 4)
             {
-                int[] modifier = { 1, 1, 1, 1, 1, 1 };
-                return modifier;
+                modifier = new int[] { 1, 1, 1, 1, 1, 1 };
             }
 
             //dragonborn
             if (raceSelect == 5)
             {
-                int[] modifier = { 2, 0, 0, 0, 0, 1 };
-                return modifier;
+                modifier = new int[] { 2, 0, 0, 0, 0, 1 };
             }
 
             //gnome
@@ -447,46 +441,33 @@ namespace DnDcharacterGenerator
                 //forest
                 if (subRaceSelect == 0)
                 {
-                    int[] modifier = { 0, 1, 0, 2, 0, 0 };
-                    return modifier;
+                    modifier = new int[] { 0, 1, 0, 2, 0, 0 };
                 }
                 //rock
                 else
                 {
-                    int[] modifier = { 0, 0, 1, 2, 0, 0 };
-                    return modifier;
+                    modifier = new int[] { 0, 0, 1, 2, 0, 0 };
                 }
             }
 
             //half elf
             if (raceSelect == 7)
             {
-                int[] modifier = { 0, 1, 0, 1, 0, 2 };
-                return modifier;
+                modifier = new int[] { 0, 1, 0, 1, 0, 2 };
             }
 
             //half orc
             if (raceSelect == 8)
             {
-                int[] modifier = { 2, 0, 1, 0, 0, 0 };
-                return modifier;
+                modifier = new int[]{ 2, 0, 1, 0, 0, 0 };
             }
 
             //tiefling
             if (raceSelect == 9)
             {
-                int[] modifier = { 0, 0, 0, 1, 0, 2 };
-                return modifier;
+                modifier = new int[] { 0, 0, 0, 1, 0, 2 };
             }
-
-
-            //undefined
-            else
-            {
-                int[] modifier = { 0, 0, 0, 0, 0, 0 };
-                return modifier;
-            }
-
+            return modifier;
         }
     }
 }
